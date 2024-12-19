@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* CSS untuk menjaga ukuran background tombol */
+.button-background-container {
+    width: 400px; /* lebar tetap */
+    max-width: 100%; /* responsive sampai 400px */
+}
