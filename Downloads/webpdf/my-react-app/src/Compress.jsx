@@ -8,7 +8,7 @@ const CompressPage = () => {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (!file || file.type !== "application/pdf") {
+    if (!file || !/application\/(pdf|x-pdf)/.test(file.type)) {
       alert("Please select a valid PDF file");
       return;
     }
@@ -17,21 +17,30 @@ const CompressPage = () => {
     formData.append("file", file);
 
     try {
-      setLoading(true); // Mulai loading
+      setLoading(true);
       const response = await axios.post("http://localhost:8000/api/compress", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setLoading(false); // Selesai loading
+      setLoading(false);
 
-      const { file_path } = response.data;
-
-      // Navigasi ke halaman hasil dengan file path sebagai state
-      navigate("/compress-page2", { state: { filePath: file_path } });
+      const { compressedFilePath } = response.data; // Ambil filePath dari response.data
+      console.log("Compressed file path:", compressedFilePath);
+      navigate("/compress-page2", { state: { compressedFilePath } }); // Gunakan filePath langsung      
     } catch (error) {
       setLoading(false);
-      console.error("Upload failed:", error);
+      console.error("Upload failed:", error.response || error.message || error);
       alert(error.response?.data?.message || "Failed to upload file. Please try again.");
     }
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    handleFileChange({ target: { files: [file] } });
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -43,12 +52,16 @@ const CompressPage = () => {
         </p>
 
         <div className="bg-[#EBF5E0] rounded-lg p-8 sm:p-12 md:p-16 lg:p-20 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col items-center">
-          <div className="button-background-container bg-[#EBF5E0] rounded-lg py-8 flex flex-col items-center">
+          <div
+            className="button-background-container bg-[#EBF5E0] rounded-lg py-8 flex flex-col items-center"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
             <input
               type="file"
               id="fileInput"
               className="hidden"
-              accept="application/pdf" // Hanya menerima file PDF
+              accept="application/pdf"
               onChange={handleFileChange}
             />
             <label

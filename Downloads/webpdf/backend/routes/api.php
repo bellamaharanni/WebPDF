@@ -41,6 +41,3 @@ Route::post('/upload-pdf', function (Request $request) {
 
     return response()->json(['file_path' => $url]);
 });
-
-
-Route::post('/upload', [FileController::class, 'upload']);

@@ -1,14 +1,30 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CompressSuccess = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { fileName, pdfUrl } = location.state || {};
 
   const toolNavigation = {
-    "Merge Page": "/merge", 
+    "Merge Page": "/merge",
     "Split Page": "/split",
     "Digital Drawing": "/drawing",
     "Signature": "/certificate",
     "Watermarking": "/watermarking",
+  };
+
+  const handleDownload = () => {
+    if (!pdfUrl) return;
+
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = fileName || "compressed-file.pdf";
+    link.click();
+  };
+
+  const handleBackToEditing = () => {
+    // Navigasi kembali ke halaman CompressPage2 dengan membawa state
+    navigate("/compress-page2", { state: { fileName, pdfUrl } });
   };
 
   return (
@@ -16,17 +32,20 @@ const CompressSuccess = () => {
       {/* Heading */}
       <main className="max-w-4xl mx-auto text-center py-12 px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">PDFs Successfully Compressed!</h1>
-        <p className="text-lg text-center text-gray-700 mb-8">ContohNamaArtikel.pdf</p>
+        <p className="text-lg text-center text-gray-700 mb-8">{fileName}</p>
       </main>
 
       {/* Buttons */}
       <div className="flex space-x-8 mb-24">
-        <button className="px-8 py-3 bg-[#516A35] text-white text-lg rounded-lg shadow-md hover:bg-[#3F512A]">
+        <button
+          className="px-8 py-3 bg-[#516A35] text-white text-lg rounded-lg shadow-md hover:bg-[#3F512A]"
+          onClick={handleDownload}
+        >
           Download File
         </button>
         <button
           className="px-8 py-3 bg-[#516A35] text-white text-lg rounded-lg shadow-md hover:bg-[#3F512A]"
-          onClick={() => navigate("/compress-page2")} // Navigate to CompressPage2
+          onClick={handleBackToEditing}
         >
           Back to Editing
         </button>
@@ -37,7 +56,7 @@ const CompressSuccess = () => {
         {Object.keys(toolNavigation).map((tool) => (
           <button
             key={tool}
-            onClick={() => navigate(toolNavigation[tool])} // Navigate to corresponding page
+            onClick={() => navigate(toolNavigation[tool])}
             className="px-6 py-2 bg-[#EBF5E0] text-[#516A35] text-sm font-medium border border-[#D9D9D9] rounded-md shadow-md hover:bg-[#DDECD0]"
           >
             {tool}

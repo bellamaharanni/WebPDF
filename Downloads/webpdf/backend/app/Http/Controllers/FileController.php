@@ -13,7 +13,7 @@ class FileController extends Controller
         Log::info('Upload started.');
 
         $validated = $request->validate([
-            'file' => 'required|mimes:pdf|max:20480',
+            'file' => 'required|mimes:pdf|max:200000',  // 20 GB
         ]);
 
         if ($request->hasFile('file')) {
@@ -35,9 +35,24 @@ class FileController extends Controller
                 $compressedFileName = 'compressed-' . time() . '-' . $file->hashName();
                 $compressedFilePath = 'compressed/' . $compressedFileName;
 
-                // Copy file ke folder compressed
-                Storage::disk('public')->copy($filePath, $compressedFilePath);
-                Log::info('Compression completed.', ['compressed_path' => $compressedFilePath]);
+                // Path file input dan output untuk kompresi
+                $inputPath = storage_path('app/public/' . $filePath);
+                $outputPath = storage_path('app/public/' . $compressedFilePath);
+
+                // Menjalankan perintah Ghostscript untuk kompresi PDF
+                $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile={$outputPath} {$inputPath}";
+                $result = shell_exec($command);
+
+                // Cek apakah proses kompresi berhasil
+                if ($result === null) {
+                    Log::info('Compression completed.', ['compressed_path' => $compressedFilePath]);
+                } else {
+                    Log::error('Error during compression.', ['result' => $result]);
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error during compression.',
+                    ], 500);
+                }
 
                 // Generate URL yang bisa diakses publik
                 $publicUrl = '/storage/' . $compressedFilePath;
@@ -46,7 +61,7 @@ class FileController extends Controller
                 return response()->json([
                     'success' => true,
                     'original_name' => $originalName,
-                    'file_path' => $publicUrl
+                    'compressedFilePath' => $publicUrl
                 ]);
             } catch (\Exception $e) {
                 Log::error('Error during file processing.', ['error' => $e->getMessage()]);
