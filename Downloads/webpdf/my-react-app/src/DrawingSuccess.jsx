@@ -1,23 +1,23 @@
 import { useNavigate } from "react-router-dom";
-
-const SplitSuccess = () => {
+const DrawingSuccess = () => {
   const navigate = useNavigate();
 
   const toolNavigation = {
     "Compress PDF": "/compress",
-    "Merge Page": "/merge", 
-    "Digital Drawing": "/drawing",
+    "Split Page": "/split",
+    "Merge Page": "/merge",
     "Signature": "/certificate",
     "Watermarking": "/watermarking",
   };
-
+  
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-start">
       {/* Heading */}
       <main className="max-w-4xl mx-auto text-center py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">PDFs Successfully Splited!</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">PDFs Successfully Signed!</h1>
         <p className="text-lg text-center text-gray-700 mb-8">ContohNamaArtikel.pdf</p>
       </main>
+
 
       {/* Buttons */}
       <div className="flex space-x-8 mb-24">
@@ -26,7 +26,7 @@ const SplitSuccess = () => {
         </button>
         <button
           className="px-8 py-3 bg-[#516A35] text-white text-lg rounded-lg shadow-md hover:bg-[#3F512A]"
-          onClick={() => navigate("/split-page2")} // Navigate to SplitPage2
+          onClick={() => navigate("/drawing-page2")} // Navigate to DrawingPage2
         >
           Back to Editing
         </button>
@@ -53,4 +53,4 @@ const SplitSuccess = () => {
   );
 };
 
-export default SplitSuccess;
+export default DrawingSuccess;

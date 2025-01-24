@@ -1,8 +1,10 @@
 import ShowIcon from './assets/showpages.png';
 import AddIcon from './assets/addfiles.png';
 import SortIcon from './assets/sortfiles.png';
+import { useNavigate } from "react-router-dom";
 
 const DrawingPage2 = () => {
+  const navigate = useNavigate(); // Hook untuk navigasi
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-start">
       {/* Header */}
@@ -29,7 +31,10 @@ const DrawingPage2 = () => {
 
       {/* Drawing Button */}
       <div className="bg-gray-50 border-t border-gray-200 w-full flex justify-center fixed bottom-0 py-6">
-        <button className="px-10 py-3 bg-[#516A35] text-white rounded-lg shadow-xl hover:bg-[#3F512A]">
+        <button
+          className="px-10 py-3 bg-[#516A35] text-white rounded-lg shadow-xl hover:bg-[#3F512A]"
+          onClick={() => navigate("/drawing-success")} // Navigasi ke halaman MergeSuccess
+        >
           Digital Drawing
         </button>
       </div>

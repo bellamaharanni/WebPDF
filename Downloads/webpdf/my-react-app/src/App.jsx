@@ -13,6 +13,7 @@ import SplitPage2 from './SplitPage2';
 import SplitSuccess from './SplitSuccess';
 import DrawingPage from './DrawingPage';
 import DrawingPage2 from './DrawingPage2';
+import DrawingSuccess from './DrawingSuccess';
 import CertificatePage from './SignPage';
 import WatermarkingPage from './Watermarking';
 import WatermarkingPage2 from './Watermarking2';
@@ -108,6 +109,7 @@ function AppContent() {
           <Route path="/split-success" element={<SplitSuccess />} />
           <Route path="/drawing" element={<DrawingPage />} />
           <Route path="/drawing-page2" element={<DrawingPage2 />} />
+          <Route path="/drawing-success" element={<DrawingSuccess />} />
           <Route path="/certificate" element={<CertificatePage />} />
           <Route path="/watermarking" element={<WatermarkingPage />} />
           <Route path="/watermarking-page2" element={<WatermarkingPage2 />} />

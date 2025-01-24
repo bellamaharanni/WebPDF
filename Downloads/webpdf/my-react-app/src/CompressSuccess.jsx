@@ -3,7 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 const CompressSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { fileName, pdfUrl } = location.state || {};
+  const { fileName, fileUrl } = location.state || {};
+
+  console.log("pdfUrl:", fileUrl);  // Menambahkan log untuk debugging
 
   const toolNavigation = {
     "Merge Page": "/merge",
@@ -14,17 +16,26 @@ const CompressSuccess = () => {
   };
 
   const handleDownload = () => {
-    if (!pdfUrl) return;
+    if (!fileUrl) {
+      alert("No file to download.");
+      return;
+    }
 
     const link = document.createElement("a");
-    link.href = pdfUrl;
+    link.href = fileUrl;
     link.download = fileName || "compressed-file.pdf";
-    link.click();
+    
+    // Cek apakah file URL adalah Blob atau URL yang dapat diakses langsung
+    if (fileUrl.startsWith("data:") || fileUrl.startsWith("blob:")) {
+      link.click();
+    } else {
+      link.target = "_blank";  // Buka di tab baru
+      link.click();
+    }
   };
 
   const handleBackToEditing = () => {
-    // Navigasi kembali ke halaman CompressPage2 dengan membawa state
-    navigate("/compress-page2", { state: { fileName, pdfUrl } });
+    navigate("/compress-page2", { state: { fileName, fileUrl } });
   };
 
   return (

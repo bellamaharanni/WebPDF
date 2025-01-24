@@ -33,7 +33,7 @@ const MergeSuccess = () => {
       </div>
 
       {/* Tools */}
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
+      <div className="flex flex-wrap justify-center gap-4 mb-8 bg-[#FCFBFB] p-6 rounded-lg shadow-lg">
         {Object.keys(toolNavigation).map((tool) => (
           <button
             key={tool}
